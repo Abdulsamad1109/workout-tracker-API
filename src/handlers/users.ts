@@ -5,7 +5,7 @@ import { User } from "../types/response";
 import { request } from "express";
 
 export function getAllUsers(req: Request, res: Response) {
-    res.send("All users are here");
+    res.send([]);
 }
 
 export function getUserById(req: Request, res: Response) {
