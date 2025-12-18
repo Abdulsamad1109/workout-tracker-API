@@ -1,4 +1,7 @@
 import { Request, Response } from "express";
+import { CreateUserDto } from "../dtos/CreateUser.dto";
+import { CreateUserQueryParams } from "../types/query-params";
+import { user } from "../types/response";
 
 export function getAllUsers(req: Request, res: Response) {
     res.send("All users are here");
@@ -9,6 +12,9 @@ export function getUserById(req: Request, res: Response) {
     res.send(`User with ID: ${userId} is here`);
 }
 
-export function createUser(req: Request, res: Response) {
-    
+export function createUser(
+    req: Request<{},{}, CreateUserDto, CreateUserQueryParams>,
+    res: Response<user>)
+    {
+    res.status(201).send();
 }
