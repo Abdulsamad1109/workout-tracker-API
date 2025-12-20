@@ -1,14 +1,9 @@
-import express, { Request, Response } from 'express';
-import userRouter from './routes/users';
+import { createApp } from "./createApp";
 
 
-const app = express();
+const app = createApp();
 
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use('/api/users', userRouter);
 
 
 app.listen(PORT, () => {
