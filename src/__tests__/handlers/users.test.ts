@@ -1,4 +1,4 @@
-import { MockRequest, MockResponse } from "../../__mocks__";
+import { MockRequest, MockResponse } from "../../__mocks__/users";
 import { getAllUsers } from "../../handlers/users";
 
 describe('getusers', () => {
