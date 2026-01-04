@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:e2e": "jest --testPathPattern=src/e2e",
+    "test:e2e": "jest --testPathPatterns=src/e2e",
     "build": "tsc --build",
     "start": "node dist/index.js",
     "start:dev": "nodemon src/index.ts"
@@ -17,13 +17,18 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
-    "passport": "^0.7.0"
+    "express-validator": "^7.3.1",
+    "passport": "^0.7.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.18.2",
     "@types/jest": "^30.0.0",
     "@types/supertest": "^6.0.3",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "jest": "^30.2.0",
     "nodemon": "^3.1.11",
     "supertest": "^7.1.4",
