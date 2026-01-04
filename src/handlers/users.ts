@@ -6,14 +6,17 @@ import { User } from "../types/response";
 
 export function createUser(
     req: Request<{},{}, CreateUserDto, CreateUserQueryParams>,
-    res: Response<User>)
-    {
-    
-    // return res.status(201).send({
-    //     // id: req.body.id,
-    //     // email: req.body.email,
-    //     // username: req.body.username
-    // });
+    res: Response<User>
+    ) {
+    const { firstName, lastName, email, password } = req.body;
+    const newUser = {
+        firstName,
+        lastName,
+        email,
+        password
+    };
+    const {password:_, ...userWithoutPassword} = newUser; // Exclude password from response
+    return res.status(201).send(userWithoutPassword);
 }
 
 export function getAllUsers(req: Request, res: Response) {
