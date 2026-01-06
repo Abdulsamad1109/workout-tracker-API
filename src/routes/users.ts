@@ -47,7 +47,7 @@ router.get("/:id", getUserById);
  *       201:
  *         description: User created successfully
  *       400:
- *         description: Validation error
+ *         description: Bad Request
  */
 router.post("/", checkSchema(userValidationShema), validate, createUser);
 
