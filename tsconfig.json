@@ -9,10 +9,10 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "commonjs",
-    "target": "es2018",
+    "target": "es2020",
     // "types": [],
     // For nodejs:
-    // "lib": ["esnext"],
+    "lib": ["ES2020"],
     // "types": ["node"],
     // and npm install -D @types/node
 
@@ -42,5 +42,10 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "strictPropertyInitialization": false
   }
 }
