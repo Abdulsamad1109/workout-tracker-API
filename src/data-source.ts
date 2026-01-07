@@ -4,15 +4,15 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL is not defined in environment variables");
+if (!process.env.DB_URL) {
+  throw new Error("DB_URL is not defined in environment variables");
 }
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  url: process.env.DATABASE_URL, // Just use the full URI
+  url: process.env.DB_URL,
   synchronize: process.env.NODE_ENV === "development",
-  logging: process.env.NODE_ENV === "development",
+  logging: ['info'],
   entities: ["src/entities/**/*.ts"],
   migrations: ["src/migrations/**/*.ts"],
   ssl: {
