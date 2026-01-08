@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { createUser, getAllUsers, getUserById } from "../handlers/users";
-import { checkSchema, validationResult } from "express-validator";
+import { checkSchema } from "express-validator";
 import { userValidationShema } from "../validators/validationschema";
 import { validate } from "../validators/validate";
 

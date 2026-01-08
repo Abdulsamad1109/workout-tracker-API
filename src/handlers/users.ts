@@ -1,29 +1,96 @@
 import { Request, Response } from "express-serve-static-core";
-import { CreateUserDto } from "../dtos/users/createUser.dto";
-import { CreateUserQueryParams } from "../types/query-params";
-import { User } from "../types/response";
+
+import { UserQueryParams } from "../types/query-params";
+import { User } from "../entities/userEntity";
+import { matchedData } from "express-validator";
+import { hashpassword } from "../helper.ts/hashpassword";
+import { AppDataSource } from "../data-source";
 
 
-export function createUser(
-    req: Request<{},{}, CreateUserDto, CreateUserQueryParams>,
-    res: Response<User>
+    //TypeORM repository
+    const userRepository = AppDataSource.getRepository(User);
+
+export async function createUser(req: Request,res: Response) {
+    try {
+        const data = matchedData(req);
+        
+        // Check user existence
+        const findUser = await userRepository.findOne({ 
+            where: { email: data.email } 
+        });
+        
+        if(findUser) {
+            return res.status(409).json({ 
+                message: "Email already exists" 
+            });
+        }
+        
+        // Hash password
+        data.password = hashpassword(data.password);
+        
+        // Create new user
+        const newUser = userRepository.create(data);
+        await userRepository.save(newUser);
+        
+        // Remove password from response
+        const { password, ...userResponseWithoutPassword } = newUser;
+        
+        return res.status(201).json({
+            message: "User created successfully",
+            user: userResponseWithoutPassword
+        });
+        
+    } catch (error) {
+        console.error("Error creating user:", error);
+        return res.status(500).json({ 
+            message: "Internal server error" 
+        });
+    }
+}
+
+export async function getAllUsers(req: Request, res: Response) {
+    try {
+
+        const users = await userRepository.find({
+            select: {
+                password: false // password field excluded
+            }
+        });
+        
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        return res.status(500).json({ 
+            message: "Internal server error" 
+        });
+    }
+}
+
+export async function getUserById(
+    req: Request<{},{}, {}, UserQueryParams>,
+    res: Response
     ) {
-    const { firstName, lastName, email, password } = req.body;
-    const newUser = {
-        firstName,
-        lastName,
-        email,
-        password
-    };
-    const {password:_, ...userWithoutPassword} = newUser; // Exclude password from response
-    return res.status(201).send(userWithoutPassword);
-}
-
-export function getAllUsers(req: Request, res: Response) {
-    res.send([]);
-}
-
-export function getUserById(req: Request, res: Response) {
-    const userId = req.params.id;
-    res.send(`User with ID: ${userId} is here`);
+    try {
+        const userId = req.query.id;
+        
+        const user = await userRepository.findOne({
+            where: { id: userId },
+            select: {
+                password: false
+            }
+        });
+        
+        if (!user) {
+            return res.status(404).json({ 
+                message: "User not found" 
+            });
+        }
+        
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return res.status(500).json({ 
+            message: "Internal server error" 
+        });
+    }
 }

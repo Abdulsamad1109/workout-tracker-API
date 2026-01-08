@@ -13,7 +13,6 @@ const startServer = async () => {
     // Verify environment variables are loaded
     if (!process.env.DB_URL) {
       console.error("❌ Database configuration missing!");
-      console.error("Please check your .env file contains DATABASE_URL or DB_HOST");
       process.exit(1);
     }
 
