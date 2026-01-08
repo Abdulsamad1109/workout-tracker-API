@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { createUser, getAllUsers, getUserById } from "../handlers/users";
 import { checkSchema } from "express-validator";
-import { userValidationShema } from "../validators/validationschema";
-import { validate } from "../validators/validate";
+import { userValidationShema } from "../validation/validationschema";
+import { validate } from "../validation/validate";
 
 const router = Router();
 
