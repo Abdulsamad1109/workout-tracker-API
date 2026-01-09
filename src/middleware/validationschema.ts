@@ -1,45 +1,30 @@
-export const userValidationSchema = {
-    firstName: {
-        trim: true,
-        isString: {
-            errorMessage: "First name must be a string"
-        },
-        notEmpty: {
-            errorMessage: "First name cannot be empty"
-        }
-    },
+import { z } from 'zod';
 
-    lastName: {
-        trim: true,
-        isString: {
-            errorMessage: "Last name must be a string"
-        },
-        notEmpty: {
-            errorMessage: "Last name cannot be empty"
-        }
-    },
+export const createUserSchema = z.object({
+    body: z.object({
+        firstName: z
+            .string()
+            .min(1, "First name cannot be empty")
+            .regex(/^[a-zA-Z\s]+$/, "First name must contain only letters")
+            .trim(),
 
-    email: {
-        trim: true,
-        isEmail: {
-            errorMessage: "Must be a valid email"
-        },
-        notEmpty: {
-            errorMessage: "Email cannot be empty"
-        }
-    },
+        lastName: z
+            .string()
+            .min(1, "Last name cannot be empty")
+            .regex(/^[a-zA-Z\s]+$/, "Last name must contain only letters")
+            .trim(),
 
-    password: {
-        trim: true,
-        isString: {
-            errorMessage: "Password must be a string"
-        },
-        notEmpty: {
-            errorMessage: "Password cannot be empty"
-        },
-        isLength: {
-            options: { min: 5 },
-            errorMessage: "Password must be at least 5 characters" // Fixed typo: errormessage -> errorMessage
-        }
-    }
-};
+        email: z
+            .string()
+            .min(1, "Email is required")
+            .email("Must be a valid email")
+            .toLowerCase()
+            .trim(),
+
+        password: z
+            .string()
+            .min(5, "Password must be at least 5 characters")
+    })
+});
+
+export type CreateUserInput = z.infer<typeof createUserSchema>['body'];

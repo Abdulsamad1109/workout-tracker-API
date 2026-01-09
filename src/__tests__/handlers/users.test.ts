@@ -5,5 +5,5 @@ describe('createUser', () => {
     it('should create a new user', () => {
         createUser(MockRequest, MockResponse);
         expect(MockResponse.send).toHaveBeenCalled();
-    });
+    }); 
 })
