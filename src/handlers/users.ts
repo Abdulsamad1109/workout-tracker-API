@@ -1,8 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
-
 import { UserQueryParams } from "../types/query-params";
 import { User } from "../entities/userEntity";
-import { matchedData } from "express-validator";
+import { CreateUserInput } from "../schemas/user.schema";
 import { hashpassword } from "../helper.ts/hashpassword";
 import { AppDataSource } from "../data-source";
 
@@ -10,9 +9,9 @@ import { AppDataSource } from "../data-source";
     //TypeORM repository
     const userRepository = AppDataSource.getRepository(User);
 
-export async function createUser(req: Request,res: Response) {
+export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Response) {
     try {
-        const data = matchedData(req);
+        const data = req.body;
         
         // Check user existence
         const findUser = await userRepository.findOne({ 

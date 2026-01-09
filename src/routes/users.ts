@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { createUser, getAllUsers, getUserById } from "../handlers/users";
-import { checkSchema } from "express-validator";
+import { validate } from "../middleware/validate";
+import { userValidationSchema } from "../schemas/user.schema";
 
 const router = Router();
 
@@ -47,6 +48,6 @@ router.get("/:id", getUserById);
  *       400:
  *         description: Bad Request
  */
-router.post("/", createUser);
+router.post("/", validate(userValidationSchema),  createUser);
 
 export default router;
