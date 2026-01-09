@@ -16,14 +16,8 @@ export const userValidationSchema = z.object({
 
        email: z
             .email()
-            .toLowerCase(),
-            // .trim()
-            // .min(1, "Email is required")
-            // .refine(
-            // (val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val),
-            // { message: "Must be a valid email" }
-            // )
-            // .transform((val) => val.toLowerCase()),
+            .trim()
+            .lowercase('Email must be lowercase'),
 
         password: z
             .string()
