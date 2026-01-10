@@ -17,6 +17,7 @@ router.get("/:id", getUserById);
  *     summary: Create a new user
  *     tags:
  *       - Users
+ *     description: Register a new user with first name, last name, email, and password
  *     requestBody:
  *       required: true
  *       content:
@@ -45,8 +46,59 @@ router.get("/:id", getUserById);
  *     responses:
  *       201:
  *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User created successfully
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     firstName:
+ *                       type: string
+ *                       example: John
+ *                     lastName:
+ *                       type: string
+ *                       example: Doe
+ *                     email:
+ *                       type: string
+ *                       example: john@example.com
  *       400:
- *         description: Bad Request
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       path:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                       message:
+ *                         type: string
+ *       409:
+ *         description: Email already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Email already exists
+ *       500:
+ *         description: Internal server error
  */
 router.post("/", validate(userValidationSchema),  createUser);
 

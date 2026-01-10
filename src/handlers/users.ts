@@ -1,5 +1,4 @@
 import { Request, Response } from "express-serve-static-core";
-import { UserQueryParams } from "../types/query-params";
 import { User } from "../entities/userEntity";
 import { CreateUserInput } from "../schemas/user.schema";
 import { hashpassword } from "../helper.ts/hashpassword";
@@ -62,11 +61,11 @@ export async function getAllUsers(req: Request, res: Response) {
 }
 
 export async function getUserById(
-    req: Request<{},{}, {}, UserQueryParams>,
+    req: Request<{ id: string }, {}, {}, {}>,
     res: Response
     ) {
     try {
-        const userId = req.query.id;
+        const userId = req.params.id;
         
         const user = await userRepository.findOne({
             where: { id: userId },
