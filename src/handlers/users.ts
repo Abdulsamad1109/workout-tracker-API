@@ -31,9 +31,12 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
         const newUser = userRepository.create(data);
         await userRepository.save(newUser);
         
+        // Remove password from response
+        const { password, ...userResponseWithoutPassword } = newUser;
+        
         return res.status(201).json({
             message: "User created successfully",
-            user: newUser
+            user: userResponseWithoutPassword
         });
         
     } catch (error) {
