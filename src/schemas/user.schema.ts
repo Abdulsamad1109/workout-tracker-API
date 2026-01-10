@@ -6,18 +6,20 @@ export const userValidationSchema = z.object({
             .string()
             .trim()
             .min(1, "First name cannot be empty")
-            .regex(/^[a-zA-Z\s]+$/, "First name must contain only letters"),
+            .regex(/^[a-zA-Z\s]+$/, "First name must contain only letters")
+            .transform((val) => val.toLowerCase()),
 
         lastName: z
             .string()
             .trim()
             .min(1, "Last name cannot be empty")
-            .regex(/^[a-zA-Z\s]+$/, "Last name must contain only letters"),
+            .regex(/^[a-zA-Z\s]+$/, "Last name must contain only letters")
+            .transform((val) => val.toLowerCase()),
 
        email: z
             .email()
             .trim()
-            .lowercase('Email must be lowercase'),
+            .transform((val) => val.toLowerCase()),
 
         password: z
             .string()
