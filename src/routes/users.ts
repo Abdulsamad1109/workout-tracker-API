@@ -50,4 +50,104 @@ router.get("/:id", getUserById);
  */
 router.post("/", validate(userValidationSchema),  createUser);
 
+
+/**
+ * @openapi
+ * /api/users:
+ *   get:
+ *     summary: Get all users
+ *     tags:
+ *       - Users
+ *     description: Retrieve a list of all registered users (passwords excluded)
+ *     responses:
+ *       200:
+ *         description: List of users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: 123e4567-e89b-12d3-a456-426614174000
+ *                   firstName:
+ *                     type: string
+ *                     example: John
+ *                   lastName:
+ *                     type: string
+ *                     example: Doe
+ *                   email:
+ *                     type: string
+ *                     example: john@example.com
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   updatedAt:
+ *                     type: string
+ *                     format: date-time
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/", getAllUsers);
+
+
+/**
+ * @openapi
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags:
+ *       - Users
+ *     description: Retrieve a single user by their ID (password excluded)
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *         example: 123e4567-e89b-12d3-a456-426614174000
+ *     responses:
+ *       200:
+ *         description: User retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: 123e4567-e89b-12d3-a456-426614174000
+ *                 firstName:
+ *                   type: string
+ *                   example: John
+ *                 lastName:
+ *                   type: string
+ *                   example: Doe
+ *                 email:
+ *                   type: string
+ *                   example: john@example.com
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get("/:id", getUserById);
+
 export default router;

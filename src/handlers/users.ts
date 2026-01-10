@@ -31,12 +31,9 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
         const newUser = userRepository.create(data);
         await userRepository.save(newUser);
         
-        // Remove password from response
-        const { password, ...userResponseWithoutPassword } = newUser;
-        
         return res.status(201).json({
             message: "User created successfully",
-            user: userResponseWithoutPassword
+            user: newUser
         });
         
     } catch (error) {
@@ -50,11 +47,7 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
 export async function getAllUsers(req: Request, res: Response) {
     try {
 
-        const users = await userRepository.find({
-            select: {
-                password: false // password field excluded
-            }
-        });
+        const users = await userRepository.find();
         
         return res.status(200).json(users);
     } catch (error) {
@@ -74,9 +67,6 @@ export async function getUserById(
         
         const user = await userRepository.findOne({
             where: { id: userId },
-            select: {
-                password: false
-            }
         });
         
         if (!user) {
@@ -92,4 +82,4 @@ export async function getUserById(
             message: "Internal server error" 
         });
     }
-}
+} 
