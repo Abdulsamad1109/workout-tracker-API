@@ -32,10 +32,10 @@ router.get("/:id", getUserById);
  *             properties:
  *               firstName:
  *                 type: string
- *                 example: John
+ *                 example: john
  *               lastName:
  *                 type: string
- *                 example: Doe
+ *                 example: doe
  *               email:
  *                 type: string
  *                 format: email
@@ -62,10 +62,10 @@ router.get("/:id", getUserById);
  *                       example: 123e4567-e89b-12d3-a456-426614174000
  *                     firstName:
  *                       type: string
- *                       example: John
+ *                       example: john
  *                     lastName:
  *                       type: string
- *                       example: Doe
+ *                       example: doe
  *                     email:
  *                       type: string
  *                       example: john@example.com
@@ -126,10 +126,10 @@ router.post("/", validate(userValidationSchema),  createUser);
  *                     example: 123e4567-e89b-12d3-a456-426614174000
  *                   firstName:
  *                     type: string
- *                     example: John
+ *                     example: john
  *                   lastName:
  *                     type: string
- *                     example: Doe
+ *                     example: doe
  *                   email:
  *                     type: string
  *                     example: john@example.com
@@ -174,10 +174,10 @@ router.get("/", getAllUsers);
  *                   example: 123e4567-e89b-12d3-a456-426614174000
  *                 firstName:
  *                   type: string
- *                   example: John
+ *                   example: john
  *                 lastName:
  *                   type: string
- *                   example: Doe
+ *                   example: doe
  *                 email:
  *                   type: string
  *                   example: john@example.com

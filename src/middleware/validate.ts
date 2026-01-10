@@ -26,7 +26,7 @@ export const validate = <T extends ZodType>(schema: T) => {
             if (error instanceof ZodError) {
                 return res.status(400).json({
                     errors: error.issues.map((issue) => ({
-                        path: issue.path,
+                        path: issue.path.join('.'),
                         message: issue.message
                     }))
                 });
