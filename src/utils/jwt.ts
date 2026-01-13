@@ -5,7 +5,6 @@ if (!process.env.JWT_SECRET) {
 }
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
 export interface TokenPayload {
   id: string;
@@ -25,6 +24,6 @@ export const verifyToken = (token: string): TokenPayload => {
     const decoded = jwt.verify(token, JWT_SECRET) as TokenPayload;
     return decoded;
   } catch (error) {
-    throw new Error('Invalid or expired token');
+    throw new Error('Invalid token');
   }
 };
