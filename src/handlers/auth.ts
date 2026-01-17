@@ -3,12 +3,13 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/userEntity";
 import { comparePassword } from "../helper.ts/hashpassword";
 import { generateToken } from "../utils/jwt";
+import { LoginDTO } from "../dtos/login.dto";
 
 
 //TypeORM repository
 const userRepository = AppDataSource.getRepository(User);
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (req: Request<{}, {}, LoginDTO, {}>, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
@@ -19,31 +20,36 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Find user by email
-    const user = await userRepository.findOne({ where: { email } });
+    const user = await userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password']
+      });
     if (!user) {
       res.status(401).send({ error: 'Invalid credentials' });
       return;
     }
 
     // Verify password
-    const validPassword = comparePassword(password, user.password);
+    const validPassword = await comparePassword(password, user.password);
+    console.log("password from request:", password);
+    console.log("password in database:", user.password);
+    console.log("validPassword result:", validPassword);
     if (!validPassword) {
-      res.status(401).json({ error: 'Invalid credentials' });
+      res.status(401).json({ error: 'Invalid credentialss' });
       return;
     }
 
     // Generate token
     const token = generateToken({
       id: user.id,
-      email: user.email,
     });
 
     res.status(200).send({
       message: 'Login successful',
-      token,
-      user: { id: user.id, email: user.email },
+      token
     });
   } catch (error) {
+    console.error("Login error:", error);
     res.status(500).send({ error: 'Server error' });
   }
 };

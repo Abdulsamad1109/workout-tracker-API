@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken, TokenPayload } from '../utils/jwt';
+import { verifyToken } from '../utils/jwt';
 
 
 export const authMiddleware = async (
@@ -27,7 +27,7 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid or expired token' });
+    res.status(401).json({ error: 'Invalid token' });
     return;
   }
 };

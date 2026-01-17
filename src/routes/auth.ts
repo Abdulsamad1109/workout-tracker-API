@@ -41,15 +41,6 @@ const router = Router();
  *                 token:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       example: 123e4567
- *                     email:
- *                       type: string
- *                       example: user@example.com
  *       400:
  *         description: Email and password are required
  *       401:
