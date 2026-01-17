@@ -1,15 +1,18 @@
 import express from 'express';
+import cors from 'cors';
 import userRouter from './routes/users';
 import authRouter from './routes/auth';
 import { query, validationResult } from 'express-validator';
 import { swaggerSpec } from './congfig/swagger';
 import swaggerUi from 'swagger-ui-express';
-import cors from 'cors';
+
 
 
 
 export function createApp() {
     const app = express();
+
+    app.use(cors());
 
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
@@ -19,8 +22,6 @@ export function createApp() {
     app.use('/api/users', userRouter);
 
     app.use('/api/auth', authRouter);
-
-    app.use(cors());
 
     app.get('/greet', query('person').notEmpty().escape(), (req, res) => {
         const result = validationResult(req);
