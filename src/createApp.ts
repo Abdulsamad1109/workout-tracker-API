@@ -1,5 +1,6 @@
 import express from 'express';
 import userRouter from './routes/users';
+import authRouter from './routes/auth';
 import { query, validationResult } from 'express-validator';
 import { swaggerSpec } from './congfig/swagger';
 import swaggerUi from 'swagger-ui-express';
@@ -16,6 +17,8 @@ export function createApp() {
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     
     app.use('/api/users', userRouter);
+
+    app.use('/api/auth', authRouter);
 
     app.use(cors());
 

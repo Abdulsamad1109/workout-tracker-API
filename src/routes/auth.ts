@@ -57,6 +57,6 @@ const router = Router();
  *       500:
  *         description: Server error
  */
-router.post("/api/auth/login", login);
+router.post("/login", login);
 
 export default router;
