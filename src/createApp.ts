@@ -3,6 +3,7 @@ import userRouter from './routes/users';
 import { query, validationResult } from 'express-validator';
 import { swaggerSpec } from './congfig/swagger';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 
 
@@ -15,6 +16,8 @@ export function createApp() {
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     
     app.use('/api/users', userRouter);
+
+    app.use(cors());
 
     app.get('/greet', query('person').notEmpty().escape(), (req, res) => {
         const result = validationResult(req);

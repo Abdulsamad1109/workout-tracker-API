@@ -5,9 +5,9 @@ import { userValidationSchema } from "../schemas/user.schema";
 
 const router = Router();
 
-router.get("/", getAllUsers);
+// router.get("/", getAllUsers);
 
-router.get("/:id", getUserById);
+// router.get("/:id", getUserById);
 
 
 /**
@@ -200,6 +200,6 @@ router.get("/", getAllUsers);
  *       500:
  *         description: Internal server error
  */
-router.get("/:id", getUserById);
+router.get(":id", getUserById);
 
 export default router;

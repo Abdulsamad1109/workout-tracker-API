@@ -51,12 +51,12 @@ const router = Router();
  *                       type: string
  *                       example: user@example.com
  *       400:
- *         description: Missing email or password
+ *         description: Email and password are required
  *       401:
  *         description: Invalid credentials
  *       500:
  *         description: Server error
  */
-router.post("/login", login);
+router.post("/api/auth/login", login);
 
 export default router;
