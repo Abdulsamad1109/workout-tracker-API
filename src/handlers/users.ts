@@ -65,10 +65,11 @@ export async function getUserById(
     res: Response
     ) {
     try {
-        const userId = req.params.id;
+
+        const { id } = req.params;
         
         const user = await userRepository.findOne({
-            where: { id: userId },
+            where: { id },
         });
         
         if (!user) {
@@ -85,3 +86,31 @@ export async function getUserById(
         });
     }
 } 
+
+export async function updateUser(
+    req: Request<{ id: string }, {}, {}>, 
+    res: Response
+    ) {
+        try {
+
+        const { id } = req.params;
+        
+        const user = await userRepository.findOne({
+            where: { id },
+        });
+        
+        if (!user) {
+            return res.status(404).json({ 
+                message: "failed to update " 
+            });
+        }
+        
+        return res.status(200).json(user);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        return res.status(500).json({ 
+            message: "Internal server error" 
+        });
+    }
+    
+}

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { createUser, getAllUsers, getUserById } from "../handlers/users";
 import { validate } from "../middleware/validate";
 import { userValidationSchema } from "../schemas/user.schema";
+import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
 
@@ -142,7 +143,7 @@ router.post("/", validate(userValidationSchema),  createUser);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllUsers);
+router.get("/", authMiddleware, getAllUsers);
 
 
 /**
@@ -200,6 +201,6 @@ router.get("/", getAllUsers);
  *       500:
  *         description: Internal server error
  */
-router.get(":id", getUserById);
+router.get("/:id", authMiddleware, getUserById);
 
 export default router;

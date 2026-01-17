@@ -3,7 +3,7 @@ import { AppDataSource } from "../data-source";
 import { User } from "../entities/userEntity";
 import { comparePassword } from "../helper.ts/hashpassword";
 import { generateToken } from "../utils/jwt";
-import { LoginDTO } from "../dtos/login.dto";
+import { LoginDTO } from "../dto/Login.dto";
 
 
 //TypeORM repository
