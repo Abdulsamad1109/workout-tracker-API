@@ -18,6 +18,8 @@ const router = Router();
  *     summary: Create a new user
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     description: Register a new user with first name, last name, email, and password
  *     requestBody:
  *       required: true
@@ -111,6 +113,8 @@ router.post("/", validate(userValidationSchema),  createUser);
  *     summary: Get all users
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     description: Retrieve a list of all registered users (passwords excluded)
  *     responses:
  *       200:
@@ -153,6 +157,8 @@ router.get("/", authMiddleware, getAllUsers);
  *     summary: Get user by ID
  *     tags:
  *       - Users
+ *     security:
+ *       - bearerAuth: []
  *     description: Retrieve a single user by their ID (password excluded)
  *     parameters:
  *       - in: path
@@ -208,7 +214,7 @@ router.get("/:id", authMiddleware, getUserById);
  * @openapi
  * /api/users/{id}:
  *   patch:
- *     summary: Update a user profile
+ *     summary: Update User
  *     tags:
  *       - Users
  *     security:
