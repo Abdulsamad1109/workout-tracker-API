@@ -212,20 +212,13 @@ router.get("/:id", authMiddleware, getUserById);
 
 /**
  * @openapi
- * /api/users/{id}:
+ * /api/users/update:
  *   patch:
  *     summary: Update User
  *     tags:
  *       - Users
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: User ID
  *     requestBody:
  *       required: true
  *       content:
@@ -256,7 +249,7 @@ router.get("/:id", authMiddleware, getUserById);
  *       500:
  *         description: Internal server error
  */
-router.patch("/:id", authMiddleware, updateUser);
+router.patch("/update", authMiddleware, updateUser);
 
 
 export default router;

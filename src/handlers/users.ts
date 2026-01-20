@@ -89,11 +89,12 @@ export async function getUserById(
 } 
 
 export async function updateUser(
-    req: Request<{ id: string }, {}, UpdateUserDTO, {}>, 
+    req: Request<{}, {}, UpdateUserDTO, {}>, 
     res: Response
 ) {
     try {
-        const { id } = req.params;
+        if (!req.user?.id) return res.status(401).send({ message: "Unauthorized" });
+        const { id } = req.user;
         const data = req.body;
         
         // Find user
