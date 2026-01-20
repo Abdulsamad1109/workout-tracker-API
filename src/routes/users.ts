@@ -18,8 +18,6 @@ const router = Router();
  *     summary: Create a new user
  *     tags:
  *       - Users
- *     security:
- *       - bearerAuth: []
  *     description: Register a new user with first name, last name, email, and password
  *     requestBody:
  *       required: true
@@ -212,9 +210,9 @@ router.get("/:id", authMiddleware, getUserById);
 
 /**
  * @openapi
- * /api/users/update:
+ * /api/users/me:
  *   patch:
- *     summary: Update User
+ *     summary: Update authenticated user's profile
  *     tags:
  *       - Users
  *     security:
@@ -228,20 +226,41 @@ router.get("/:id", authMiddleware, getUserById);
  *             properties:
  *               firstName:
  *                 type: string
+ *                 example: John
  *               lastName:
  *                 type: string
+ *                 example: Doe
  *               email:
  *                 type: string
  *                 format: email
+ *                 example: john@example.com
  *               password:
  *                 type: string
+ *                 example: newPassword123
  *     responses:
  *       200:
  *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User updated successfully
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     firstName:
+ *                       type: string
+ *                     lastName:
+ *                       type: string
+ *                     email:
+ *                       type: string
  *       401:
  *         description: Unauthorized
- *       403:
- *         description: Forbidden
  *       404:
  *         description: User not found
  *       409:

@@ -19,7 +19,7 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
         });
         
         if(findUser) {
-            return res.status(409).json({ 
+            return res.status(409).send({ 
                 message: "Email already exists" 
             });
         }
@@ -34,14 +34,14 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
         // Remove password from response
         const { password, ...userResponseWithoutPassword } = newUser;
         
-        return res.status(201).json({
+        return res.status(201).send({
             message: "User created successfully",
             user: userResponseWithoutPassword
         });
         
     } catch (error) {
         console.error("Error creating user:", error);
-        return res.status(500).json({ 
+        return res.status(500).send({ 
             message: "Internal server error" 
         });
     }
@@ -52,10 +52,10 @@ export async function getAllUsers(req: Request, res: Response) {
 
         const users = await userRepository.find();
         
-        return res.status(200).json(users);
+        return res.status(200).send(users);
     } catch (error) {
         console.error("Error fetching users:", error);
-        return res.status(500).json({ 
+        return res.status(500).send({ 
             message: "Internal server error" 
         });
     }
@@ -74,15 +74,15 @@ export async function getUserById(
         });
         
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).send({ 
                 message: "User not found" 
             });
         }
         
-        return res.status(200).json(user);
+        return res.status(200).send(user);
     } catch (error) {
         console.error("Error fetching user:", error);
-        return res.status(500).json({ 
+        return res.status(500).send({ 
             message: "Internal server error" 
         });
     }
@@ -104,7 +104,7 @@ export async function updateUser(
         
         // If user exists
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).send({ 
                 message: "User not found" 
             });
         }
@@ -116,7 +116,7 @@ export async function updateUser(
             });
             
             if (emailExists) {
-                return res.status(409).json({ 
+                return res.status(409).send({ 
                     message: "Email already exists" 
                 });
             }
@@ -136,14 +136,14 @@ export async function updateUser(
         // Remove password from response
         const { password, ...userResponse } = user;
         
-        return res.status(200).json({
+        return res.status(200).send({
             message: "User updated successfully",
             user: userResponse
         });
         
     } catch (error) {
         console.error("Error updating profile:", error);
-        return res.status(500).json({ 
+        return res.status(500).send({ 
             message: "Internal server error" 
         });
     }

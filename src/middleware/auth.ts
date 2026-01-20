@@ -23,7 +23,7 @@ export const authMiddleware = async (
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      res.status(401).json({ error: 'invalid token' });
+      res.status(401).send({ error: 'unauthorized' });
       return;
     }
 
@@ -38,7 +38,7 @@ export const authMiddleware = async (
 
     next();
   } catch (error) {
-    res.status(401).json({ error: 'Invalid token' });
+    res.status(401).send({ error: 'something went wrong' });
     return;
   }
 };
