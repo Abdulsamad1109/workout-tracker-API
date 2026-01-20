@@ -3,6 +3,7 @@ import { User } from "../entities/userEntity";
 import { CreateUserInput } from "../schemas/user.schema";
 import { hashpassword } from "../helper.ts/hashpassword";
 import { AppDataSource } from "../data-source";
+import { UpdateUserDTO } from "../dto/UpdateUser.dto";
 
 
     //TypeORM repository
@@ -88,29 +89,61 @@ export async function getUserById(
 } 
 
 export async function updateUser(
-    req: Request<{ id: string }, {}, {}>, 
+    req: Request<{ id: string }, {}, UpdateUserDTO, {}>, 
     res: Response
-    ) {
-        try {
-
+) {
+    try {
         const { id } = req.params;
+        const data = req.body;
         
+        // Find user
         const user = await userRepository.findOne({
             where: { id },
         });
         
+        // If user exists
         if (!user) {
             return res.status(404).json({ 
-                message: "failed to update " 
+                message: "User not found" 
             });
         }
         
-        return res.status(200).json(user);
+        // If email is being updated, check if new email already exists
+        if (data.email && data.email !== user.email) {
+            const emailExists = await userRepository.findOne({
+                where: { email: data.email }
+            });
+            
+            if (emailExists) {
+                return res.status(409).json({ 
+                    message: "Email already exists" 
+                });
+            }
+        }
+        
+        // If password is being updated, hash it
+        if (data.password) {
+            data.password = hashpassword(data.password);
+        }
+        
+        // Update user fields
+        Object.assign(user, data);
+        
+        // Save updated user
+        await userRepository.save(user);
+        
+        // Remove password from response
+        const { password, ...userResponse } = user;
+        
+        return res.status(200).json({
+            message: "User updated successfully",
+            user: userResponse
+        });
+        
     } catch (error) {
-        console.error("Error fetching user:", error);
+        console.error("Error updating profile:", error);
         return res.status(500).json({ 
             message: "Internal server error" 
         });
     }
-    
 }

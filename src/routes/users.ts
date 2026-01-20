@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, getAllUsers, getUserById } from "../handlers/users";
+import { createUser, getAllUsers, getUserById, updateUser } from "../handlers/users";
 import { validate } from "../middleware/validate";
 import { userValidationSchema } from "../schemas/user.schema";
 import { authMiddleware } from "../middleware/auth";
@@ -202,5 +202,55 @@ router.get("/", authMiddleware, getAllUsers);
  *         description: Internal server error
  */
 router.get("/:id", authMiddleware, getUserById);
+
+
+/**
+ * @openapi
+ * /api/users/{id}:
+ *   patch:
+ *     summary: Update a user profile
+ *     tags:
+ *       - Users
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *               lastName:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: Email already exists
+ *       500:
+ *         description: Internal server error
+ */
+router.patch("/:id", authMiddleware, updateUser);
+
 
 export default router;
