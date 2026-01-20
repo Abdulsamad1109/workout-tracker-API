@@ -33,33 +33,23 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AppDataSource = void 0;
 require("reflect-metadata");
+const typeorm_1 = require("typeorm");
 const dotenv = __importStar(require("dotenv"));
-const data_source_1 = require("./data-source");
-const createApp_1 = require("./createApp");
 dotenv.config();
-const PORT = process.env.PORT || 3000;
-const startServer = async () => {
-    try {
-        // Verify environment variables are loaded
-        if (!process.env.DB_URL) {
-            console.error("❌ Database configuration missing!");
-            process.exit(1);
-        }
-        // Initialize TypeORM connection
-        await data_source_1.AppDataSource.initialize();
-        console.log("Database connected successfully");
-        // Create Express app
-        const app = (0, createApp_1.createApp)();
-        // Start server
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
+if (!process.env.DB_URL) {
+    throw new Error("DB_URL is not defined in environment variables");
+}
+exports.AppDataSource = new typeorm_1.DataSource({
+    type: "postgres",
+    url: process.env.DB_URL,
+    synchronize: process.env.NODE_ENV === "development",
+    // logging: ['info'],
+    entities: ["src/entities/**/*.ts"],
+    migrations: ["src/migrations/**/*.ts"],
+    ssl: {
+        rejectUnauthorized: false
     }
-    catch (error) {
-        console.error("Error starting server:", error);
-        process.exit(1);
-    }
-};
-startServer();
-//# sourceMappingURL=index.js.map
+});
+//# sourceMappingURL=data-source.js.map

@@ -47,5 +47,8 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     "strictPropertyInitialization": false
-  }
+  },
+
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
 }

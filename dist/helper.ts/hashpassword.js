@@ -33,33 +33,16 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-require("reflect-metadata");
-const dotenv = __importStar(require("dotenv"));
-const data_source_1 = require("./data-source");
-const createApp_1 = require("./createApp");
-dotenv.config();
-const PORT = process.env.PORT || 3000;
-const startServer = async () => {
-    try {
-        // Verify environment variables are loaded
-        if (!process.env.DB_URL) {
-            console.error("❌ Database configuration missing!");
-            process.exit(1);
-        }
-        // Initialize TypeORM connection
-        await data_source_1.AppDataSource.initialize();
-        console.log("Database connected successfully");
-        // Create Express app
-        const app = (0, createApp_1.createApp)();
-        // Start server
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
-    }
-    catch (error) {
-        console.error("Error starting server:", error);
-        process.exit(1);
-    }
+exports.comparePassword = exports.hashpassword = void 0;
+const bcrypt = __importStar(require("bcrypt"));
+const hashpassword = (password) => {
+    // Generate salt
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
 };
-startServer();
-//# sourceMappingURL=index.js.map
+exports.hashpassword = hashpassword;
+const comparePassword = (plain, hashed) => {
+    return bcrypt.compareSync(plain, hashed);
+};
+exports.comparePassword = comparePassword;
+//# sourceMappingURL=hashpassword.js.map
