@@ -148,3 +148,32 @@ export async function updateUser(
         });
     }
 }
+
+export async function deleteUser(
+    req: Request<{ id: string }, {}, {}, {}>, 
+    res: Response) {
+        try {
+            const { id } = req.params;
+            
+            const user = await userRepository.findOne({
+                where: { id },
+            });
+            
+            if (!user) {
+                return res.status(404).send({ 
+                    message: "User not found" 
+                });
+            }
+            
+            await userRepository.remove(user);
+            
+            return res.status(200).send({
+                message: "User deleted successfully"
+            });
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return res.status(500).send({ 
+                message: "Internal server error" 
+            });
+        }
+    }

@@ -6,10 +6,6 @@ import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
 
-// router.get("/", getAllUsers);
-
-// router.get("/:id", getUserById);
-
 
 /**
  * @openapi
@@ -210,7 +206,7 @@ router.get("/:id", authMiddleware, getUserById);
 
 /**
  * @openapi
- * /api/users/me:
+ * /api/users/update-me:
  *   patch:
  *     summary: Update authenticated user's profile
  *     tags:
@@ -253,12 +249,17 @@ router.get("/:id", authMiddleware, getUserById);
  *                   properties:
  *                     id:
  *                       type: string
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
  *                     firstName:
  *                       type: string
+ *                       example: john
  *                     lastName:
  *                       type: string
+ *                       example: doe
  *                     email:
  *                       type: string
+ *                       format: email
+ *                       example: john@example.com
  *       401:
  *         description: Unauthorized
  *       404:
@@ -268,7 +269,7 @@ router.get("/:id", authMiddleware, getUserById);
  *       500:
  *         description: Internal server error
  */
-router.patch("/update", authMiddleware, updateUser);
+router.patch("/update-me", authMiddleware, updateUser);
 
 
 export default router;
