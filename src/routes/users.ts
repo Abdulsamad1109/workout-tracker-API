@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUser, getAllUsers, getUserById, updateUser } from "../handlers/users";
+import { createUser, deleteUser, getAllUsers, getUserById, updateUser } from "../handlers/users";
 import { validate } from "../middleware/validate";
 import { userValidationSchema } from "../schemas/user.schema";
 import { authMiddleware } from "../middleware/auth";
@@ -141,7 +141,7 @@ router.post("/", validate(userValidationSchema),  createUser);
  *       500:
  *         description: Internal server error
  */
-router.get("/", authMiddleware, getAllUsers);
+router.get("/", getAllUsers);
 
 
 /**
@@ -270,6 +270,46 @@ router.get("/:id", authMiddleware, getUserById);
  *         description: Internal server error
  */
 router.patch("/update-me", authMiddleware, updateUser);
+
+
+/**
+ * @openapi
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags:
+ *       - Users
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete("/:id", authMiddleware, deleteUser);
+
 
 
 export default router;
