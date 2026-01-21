@@ -1,7 +1,7 @@
 import { Request, Response } from "express-serve-static-core";
 import { User } from "../entities/userEntity";
 import { CreateUserInput } from "../schemas/user.schema";
-import { hashpassword } from "../helper.ts/hashpassword";
+import { hashpassword } from "../helpers/hashpassword";
 import { AppDataSource } from "../data-source";
 import { UpdateUserDTO } from "../dto/UpdateUser.dto";
 
