@@ -1,12 +1,21 @@
 import { Request, Response } from 'express';
-import { createUser } from '../../handlers/users';
-import { AppDataSource } from '../../data-source'; 
-import { User } from '../../entities/userEntity';
-import { hashpassword } from '../../helpers/hashpassword'; 
 
-// Mock dependencies
-jest.mock('../../data-source');
-jest.mock('../../helpers');
+// Mock BEFORE any imports that use them
+const mockGetRepository = jest.fn();
+const mockHashpassword = jest.fn();
+
+jest.mock('../../data-source', () => ({
+  AppDataSource: {
+    getRepository: mockGetRepository
+  }
+}));
+
+jest.mock('../../helpers/hashpassword', () => ({
+  hashpassword: mockHashpassword
+}));
+
+// NOW we can import after mocks are established
+import { createUser } from '../../handlers/users';
 
 describe('createUser', () => {
   let mockRequest: Partial<Request>;
@@ -16,7 +25,6 @@ describe('createUser', () => {
   let mockUserRepository: any;
 
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks();
     
     sendMock = jest.fn();
@@ -26,7 +34,8 @@ describe('createUser', () => {
       body: {
         email: 'test@example.com',
         password: 'password123',
-        name: 'Test User'
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
       }
     };
     
@@ -35,14 +44,15 @@ describe('createUser', () => {
       send: sendMock
     };
 
-    // Mock the repository
+    // Setup repository mock
     mockUserRepository = {
       findOne: jest.fn(),
       create: jest.fn(),
       save: jest.fn()
     };
 
-    (AppDataSource.getRepository as jest.Mock).mockReturnValue(mockUserRepository);
+    // This needs to be set up BEFORE the module loads
+    mockGetRepository.mockReturnValue(mockUserRepository);
   });
 
   describe('Successful user creation', () => {
@@ -53,11 +63,12 @@ describe('createUser', () => {
         id: 1,
         email: 'test@example.com',
         password: hashedPassword,
-        name: 'Test User'
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
       };
 
       mockUserRepository.findOne.mockResolvedValue(null);
-      (hashpassword as jest.Mock).mockReturnValue(hashedPassword);
+      mockHashpassword.mockReturnValue(hashedPassword);
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
 
@@ -71,16 +82,12 @@ describe('createUser', () => {
         user: {
           id: 1,
           email: 'test@example.com',
-          name: 'Test User'
-          // password should NOT be here
+          firstname: 'Habeeb',
+          lastname: 'Kareem'
         }
       });
     });
   });
 
-
-
-
   
-
 });

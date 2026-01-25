@@ -6,11 +6,11 @@ import { AppDataSource } from "../data-source";
 import { UpdateUserDTO } from "../dto/UpdateUser.dto";
 
 
-    //TypeORM repository
-    const userRepository = AppDataSource.getRepository(User);
+export const getUserRepository = () => AppDataSource.getRepository(User);
 
 export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Response) {
     try {
+        const userRepository = getUserRepository(); 
         const data = req.body;
         
         // Check user existence
@@ -49,7 +49,7 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
 
 export async function getAllUsers(req: Request, res: Response) {
     try {
-
+        const userRepository = getUserRepository(); 
         const users = await userRepository.find();
         
         return res.status(200).send(users);
@@ -64,9 +64,9 @@ export async function getAllUsers(req: Request, res: Response) {
 export async function getUserById(
     req: Request<{ id: string }, {}, {}, {}>,
     res: Response
-    ) {
+) {
     try {
-
+        const userRepository = getUserRepository(); 
         const { id } = req.params;
         
         const user = await userRepository.findOne({
@@ -93,23 +93,21 @@ export async function updateUser(
     res: Response
 ) {
     try {
+        const userRepository = getUserRepository();
         if (!req.user?.id) return res.status(401).send({ message: "Unauthorized" });
         const { id } = req.user;
         const data = req.body;
         
-        // Find user
         const user = await userRepository.findOne({
             where: { id },
         });
         
-        // If user exists
         if (!user) {
             return res.status(404).send({ 
                 message: "User not found" 
             });
         }
         
-        // If email is being updated, check if new email already exists
         if (data.email && data.email !== user.email) {
             const emailExists = await userRepository.findOne({
                 where: { email: data.email }
@@ -122,18 +120,13 @@ export async function updateUser(
             }
         }
         
-        // If password is being updated, hash it
         if (data.password) {
             data.password = hashpassword(data.password);
         }
         
-        // Update user fields
         Object.assign(user, data);
-        
-        // Save updated user
         await userRepository.save(user);
         
-        // Remove password from response
         const { password, ...userResponse } = user;
         
         return res.status(200).send({
@@ -151,29 +144,31 @@ export async function updateUser(
 
 export async function deleteUser(
     req: Request<{ id: string }, {}, {}, {}>, 
-    res: Response) {
-        try {
-            const { id } = req.params;
-            
-            const user = await userRepository.findOne({
-                where: { id },
-            });
-            
-            if (!user) {
-                return res.status(404).send({ 
-                    message: "User not found" 
-                });
-            }
-            
-            await userRepository.remove(user);
-            
-            return res.status(200).send({
-                message: "User deleted successfully"
-            });
-        } catch (error) {
-            console.error("Error deleting user:", error);
-            return res.status(500).send({ 
-                message: "Internal server error" 
+    res: Response
+) {
+    try {
+        const userRepository = getUserRepository(); 
+        const { id } = req.params;
+        
+        const user = await userRepository.findOne({
+            where: { id },
+        });
+        
+        if (!user) {
+            return res.status(404).send({ 
+                message: "User not found" 
             });
         }
+        
+        await userRepository.remove(user);
+        
+        return res.status(200).send({
+            message: "User deleted successfully"
+        });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return res.status(500).send({ 
+            message: "Internal server error" 
+        });
     }
+}
