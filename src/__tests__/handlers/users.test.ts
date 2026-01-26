@@ -16,6 +16,7 @@ jest.mock('../../helpers/hashpassword', () => ({
 
 // NOW we can import after mocks are established
 import { createUser } from '../../handlers/users';
+import { hashpassword } from '../../helpers/hashpassword';
 
 describe('createUser', () => {
   let mockRequest: Partial<Request>;
@@ -32,10 +33,10 @@ describe('createUser', () => {
     
     mockRequest = {
       body: {
+        firstname: 'Habeeb',
+        lastname: 'Kareem',
         email: 'test@example.com',
         password: 'password123',
-        firstname: 'Habeeb',
-        lastname: 'Kareem'
       }
     };
     
@@ -61,14 +62,14 @@ describe('createUser', () => {
       const hashedPassword = 'hashed_password_123';
       const mockUser = {
         id: 1,
+        firstname: 'Habeeb',
+        lastname: 'Kareem',
         email: 'test@example.com',
         password: hashedPassword,
-        firstname: 'Habeeb',
-        lastname: 'Kareem'
       };
 
-      mockUserRepository.findOne.mockResolvedValue(null);
-      mockHashpassword.mockReturnValue(hashedPassword);
+      mockUserRepository.findOne.mockResolvedValue(null); // No existing user
+      mockHashpassword.mockReturnValue(hashedPassword); // Mock hashed password
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
 
@@ -88,6 +89,9 @@ describe('createUser', () => {
       });
     });
   });
+
+
+
 
   
 });
