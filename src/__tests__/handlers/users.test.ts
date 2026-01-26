@@ -111,6 +111,38 @@ describe('createUser', () => {
     });
   });
 
+
+  describe('Password hashing', () => {
+    it('should hash the password before saving', async () => {
+      // Arrange
+      const plainPassword = 'password123';
+      const hashedPassword = 'hashed_password_123';
+      const mockUser = {
+        id: 1,
+        email: 'test@example.com',
+        password: hashedPassword,
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
+      };
+
+      mockUserRepository.findOne.mockResolvedValue(null);
+      (hashpassword as jest.Mock).mockReturnValue(hashedPassword);
+      mockUserRepository.create.mockReturnValue(mockUser);
+      mockUserRepository.save.mockResolvedValue(mockUser);
+
+      // Act
+      await usersHandler.createUser(mockRequest as Request, mockResponse as Response);
+
+      // Assert
+      expect(hashpassword).toHaveBeenCalledWith(plainPassword);
+      expect(mockUserRepository.create).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: hashedPassword,
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
+      });
+    });
+  });
   
 
   
