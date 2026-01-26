@@ -85,7 +85,6 @@ describe('getAllUsers', () => {
 
     let consoleErrorSpy: jest.SpyInstance;
 
-    
     beforeEach(() => {
       consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     });
