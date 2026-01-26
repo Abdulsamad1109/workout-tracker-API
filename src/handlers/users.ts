@@ -40,7 +40,7 @@ export async function createUser(req: Request<{}, {}, CreateUserInput>, res: Res
         });
         
     } catch (error) {
-        console.error("Error creating user:", error);
+        // console.error("Error creating user:", error);
         return res.status(500).send({ 
             message: "Internal server error" 
         });
@@ -54,7 +54,7 @@ export async function getAllUsers(req: Request, res: Response) {
         
         return res.status(200).send(users);
     } catch (error) {
-        console.error("Error fetching users:", error);
+        // console.error("Error fetching users:", error);
         return res.status(500).send({ 
             message: "Internal server error" 
         });
@@ -81,7 +81,7 @@ export async function getUserById(
         
         return res.status(200).send(user);
     } catch (error) {
-        console.error("Error fetching user:", error);
+        // console.error("Error fetching user:", error);
         return res.status(500).send({ 
             message: "Internal server error" 
         });
@@ -135,7 +135,7 @@ export async function updateUser(
         });
         
     } catch (error) {
-        console.error("Error updating profile:", error);
+        // console.error("Error updating profile:", error);
         return res.status(500).send({ 
             message: "Internal server error" 
         });
@@ -166,7 +166,7 @@ export async function deleteUser(
             message: "User deleted successfully"
         });
     } catch (error) {
-        console.error("Error deleting user:", error);
+        // console.error("Error deleting user:", error);
         return res.status(500).send({ 
             message: "Internal server error" 
         });
