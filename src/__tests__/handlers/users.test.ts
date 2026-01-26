@@ -1,22 +1,9 @@
 import { Request, Response } from 'express';
-
-// Mock BEFORE any imports that use them
-const mockGetRepository = jest.fn();
-const mockHashpassword = jest.fn();
-
-jest.mock('../../data-source', () => ({
-  AppDataSource: {
-    getRepository: mockGetRepository
-  }
-}));
-
-jest.mock('../../helpers/hashpassword', () => ({
-  hashpassword: mockHashpassword
-}));
-
-// NOW we can import after mocks are established
-import { createUser } from '../../handlers/users';
+import * as usersHandler from '../../handlers/users';
 import { hashpassword } from '../../helpers/hashpassword';
+
+// Mock the dependencies
+jest.mock('../../helpers/hashpassword');
 
 describe('createUser', () => {
   let mockRequest: Partial<Request>;
@@ -24,6 +11,7 @@ describe('createUser', () => {
   let statusMock: jest.Mock;
   let sendMock: jest.Mock;
   let mockUserRepository: any;
+  let getUserRepositorySpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,7 +24,7 @@ describe('createUser', () => {
         firstname: 'Habeeb',
         lastname: 'Kareem',
         email: 'test@example.com',
-        password: 'password123',
+        password: 'password123'
       }
     };
     
@@ -52,8 +40,14 @@ describe('createUser', () => {
       save: jest.fn()
     };
 
-    // This needs to be set up BEFORE the module loads
-    mockGetRepository.mockReturnValue(mockUserRepository);
+    // Spy on getUserRepository and return our mock
+    getUserRepositorySpy = jest
+      .spyOn(usersHandler, 'getUserRepository')
+      .mockReturnValue(mockUserRepository);
+  });
+
+  afterEach(() => {
+    getUserRepositorySpy.mockRestore();
   });
 
   describe('Successful user creation', () => {
@@ -62,19 +56,19 @@ describe('createUser', () => {
       const hashedPassword = 'hashed_password_123';
       const mockUser = {
         id: 1,
-        firstname: 'Habeeb',
-        lastname: 'Kareem',
         email: 'test@example.com',
         password: hashedPassword,
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
       };
 
       mockUserRepository.findOne.mockResolvedValue(null); // No existing user
-      mockHashpassword.mockReturnValue(hashedPassword); // Mock hashed password
+      (hashpassword as jest.Mock).mockReturnValue(hashedPassword); // Mock password hashing
       mockUserRepository.create.mockReturnValue(mockUser);
       mockUserRepository.save.mockResolvedValue(mockUser);
 
       // Act
-      await createUser(mockRequest as Request, mockResponse as Response);
+      await usersHandler.createUser(mockRequest as Request, mockResponse as Response);
 
       // Assert
       expect(statusMock).toHaveBeenCalledWith(201);
@@ -90,8 +84,12 @@ describe('createUser', () => {
     });
   });
 
-
-
+  
 
   
+
+  
+
+  
+
 });
