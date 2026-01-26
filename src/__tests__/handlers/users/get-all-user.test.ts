@@ -81,6 +81,20 @@ describe('getAllUsers', () => {
   });
 
   describe('Error handling', () => {
+
+
+    let consoleErrorSpy: jest.SpyInstance;
+
+    
+    beforeEach(() => {
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
+
+
     it('should return 500 when database operation fails', async () => {
       // Arrange
       mockUserRepository.find.mockRejectedValue(

@@ -176,6 +176,19 @@ describe('createUser', () => {
   
 
    describe('Error handling', () => {
+
+
+    let consoleErrorSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleErrorSpy.mockRestore();
+    });
+
+
     it('should return 500 when database findOne operation fails', async () => {
       // Arrange
       mockUserRepository.findOne.mockRejectedValue(
