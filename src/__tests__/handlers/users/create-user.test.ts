@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import * as usersHandler from '../../handlers/users';
-import { hashpassword } from '../../helpers/hashpassword';
+import * as usersHandler from '../../../handlers/users';
+import { hashpassword } from '../../../helpers/hashpassword';
 
 // Mock the dependencies
-jest.mock('../../helpers/hashpassword');
+jest.mock('../../../helpers/hashpassword');
 
 describe('createUser', () => {
   let mockRequest: Partial<Request>;
