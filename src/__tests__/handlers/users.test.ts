@@ -85,6 +85,31 @@ describe('createUser', () => {
   });
 
   
+    describe('Duplicate email prevention', () => {
+    it('should return 409 when email already exists', async () => {
+      // Arrange
+      const existingUser = {
+        id: 1,
+        email: 'test@example.com',
+        password: 'hashed_password',
+        firstname: 'Habeeb',
+        lastname: 'Kareem'
+      };
+
+      mockUserRepository.findOne.mockResolvedValue(existingUser);
+
+      // Act
+      await usersHandler.createUser(mockRequest as Request, mockResponse as Response);
+
+      // Assert
+      expect(statusMock).toHaveBeenCalledWith(409);
+      expect(sendMock).toHaveBeenCalledWith({
+        message: 'Email already exists'
+      });
+      expect(mockUserRepository.create).not.toHaveBeenCalled();
+      expect(mockUserRepository.save).not.toHaveBeenCalled();
+    });
+  });
 
   
 
